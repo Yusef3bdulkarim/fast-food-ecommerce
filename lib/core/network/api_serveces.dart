@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:ecommerce_app_food/core/network/api_error.dart';
 import 'package:ecommerce_app_food/core/network/api_exeption.dart';
 import 'package:ecommerce_app_food/core/network/dio_client.dart';
-import 'package:ecommerce_app_food/features/homeScreen/data/models/model_foodApp.dart';
+import 'package:ecommerce_app_food/core/models/model_foodApp.dart';
 
 class ApiServices {
   final DioClient _dioClient;
