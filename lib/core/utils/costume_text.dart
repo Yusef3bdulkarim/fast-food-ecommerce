@@ -1,6 +1,6 @@
-import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CostumeText extends StatelessWidget {
   final String text;
   final double fontSize;

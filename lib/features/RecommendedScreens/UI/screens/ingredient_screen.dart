@@ -1,28 +1,34 @@
-import 'package:ecommerce_app_food/features/RecommendedScreens/logic/controller_ingredient.dart';
-import 'package:ecommerce_app_food/features/HomeScreens/logic/controller_recommend.dart';
+import 'package:ecommerce_app_food/features/HomeScreens/data/models/model_foodApp.dart';
+import 'package:ecommerce_app_food/features/RecommendedScreens/logic/cubit/recommended_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app_food/features/RecommendedScreens/UI/widgets/background_details.dart';
 import 'package:ecommerce_app_food/features/RecommendedScreens/UI/widgets/bottomBar_ingredient.dart';
 import 'package:ecommerce_app_food/features/RecommendedScreens/UI/widgets/cont_details.dart';
 
-// ignore: must_be_immutable
 class IngredientScreen extends StatelessWidget {
-  int idPopular;
-  IngredientScreen({Key? key, required this.idPopular}) : super(key: key);
+  // 1. استلام الموديل بالكامل بدلاً من الـ ID
+  final ProductModel product;
+
+  const IngredientScreen({Key? key, required this.product}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    var product = Get.find<ControllerRecommended>().newList[idPopular];
-    Get.put(ControllerRecommend()).initRecommended(product);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          BackgroundIngrdient(),
-          SliverToBoxAdapter(child: ContIngredient()),
-        ],
+    // 2. مفيش داعي لعمل watch للـ HomeCubit هنا
+    return BlocProvider(
+      create: (context) =>
+          RecommendedCubit()..initProduct((product.price ?? 0).toDouble()),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: CustomScrollView(
+          slivers: [
+            // 3. تمرير الموديل للـ Widgets الفرعية
+            BackgroundIngrdient(product: product),
+            SliverToBoxAdapter(child: ContIngredient(product: product)),
+          ],
+        ),
+        bottomNavigationBar: BottombarIngredient(product: product),
       ),
-      bottomNavigationBar: BottombarIngredient(),
     );
   }
 }

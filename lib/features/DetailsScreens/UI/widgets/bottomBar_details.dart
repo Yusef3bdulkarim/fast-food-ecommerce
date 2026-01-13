@@ -1,110 +1,90 @@
+import 'package:ecommerce_app_food/features/CartScreens/logic/cubit/cart_cubit.dart';
+import 'package:ecommerce_app_food/features/DetailsScreens/logic/cubit/product_details_cubit.dart';
+import 'package:ecommerce_app_food/features/HomeScreens/data/models/model_foodApp.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
-import 'package:ecommerce_app_food/features/CartScreens/logic/controller_carts.dart';
-import 'package:ecommerce_app_food/features/DetailsScreens/logic/controller_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-// ignore: must_be_immutable
 class BarDetails extends StatelessWidget {
-  BarDetails({super.key});
-  final ControllerDetails _controller = Get.put(ControllerDetails());
-  var product = Get.find<ControllerDetails>().product;
-  final ControllerCarts cartController = Get.find<ControllerCarts>();
+  final ProductModel product;
+  BarDetails({super.key, required this.product});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 90.h,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(73, 158, 158, 158),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30.r),
-          topRight: Radius.circular(30.r),
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18.w),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Obx(() {
-              return Container(
-                height: 45.h,
-                width: 85.w,
+    return BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
+      builder: (context, state) {
+        return Container(
+          height: 90.h,
+          padding: EdgeInsets.symmetric(horizontal: 18.w),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(73, 158, 158, 158),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // العداد
+              Container(
+                padding: EdgeInsets.all(10.w),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.r),
                   color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.r),
                 ),
                 child: Row(
-                  // crossAxisAlignment: CrossAxisAlignment.start/,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: () => _controller.minesIndex(),
-                      child: Icon(
-                        Icons.remove,
-                        size: 15.sp,
-                        color: const Color.fromARGB(208, 0, 0, 0),
-                      ),
+                      onTap: () => context
+                          .read<ProductDetailsCubit>()
+                          .setQuantity(false),
+                      child: Icon(Icons.remove, size: 18.sp),
                     ),
-                    Gap(8.h),
-                    CostumeText(
-                      text: "${_controller.currentIndex.value}",
-                      color: Colors.black,
-                      fontSize: 15.sp,
-                    ),
-                    Gap(8.h),
+                    Gap(10.w),
+                    CostumeText(text: "${state.quantity}", color: Colors.black),
+                    Gap(10.w),
                     GestureDetector(
-                      onTap: () => _controller.addIndex(),
-                      child: Icon(
-                        Icons.add,
-                        size: 16,
-                        color: const Color.fromARGB(202, 0, 0, 0),
-                      ),
+                      onTap: () =>
+                          context.read<ProductDetailsCubit>().setQuantity(true),
+                      child: Icon(Icons.add, size: 18.sp),
                     ),
                   ],
                 ),
-              );
-            }),
-            GestureDetector(
-              onTap: () {
-                cartController.addItems(
-                  product,
-                  _controller.currentIndex.value,
-                );
-
-                Get.snackbar(
-                  "Cart",
-                  "Added to cart successfully!",
-                  backgroundColor: AppColors.OrangeColor,
-                  colorText: Colors.white,
-                  snackPosition: SnackPosition.TOP,
-                );
-              },
-              child: Container(
-                height: 45.h,
-                width: 165.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.r),
-                  color: AppColors.mainColor,
-                ),
-                child: Obx(() {
-                  return Center(
-                    child: CostumeText(
-                      text:
-                          "${_controller.currentprice.value.toString()} | Add You Card",
-                      color: Colors.white,
-                      fontSize: 15.sp,
-                    ),
-                  );
-                }),
               ),
-            ),
-          ],
-        ),
-      ),
+              // زر الإضافة
+              GestureDetector(
+                onTap: () {
+                  if (state.quantity > 0) {
+                    // بنبعت الـ product والكمية اللي في الـ state للـ CartCubit
+                    context.read<CartCubit>().addItems(product, state.quantity);
+                  } else {
+                    Get.snackbar(
+                      "Warning",
+                      "Quantity must be more than 0",
+                      backgroundColor: Colors.amber,
+                      colorText: Colors.white,
+                    );
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(15.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.mainColor,
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                  child: CostumeText(
+                    text:
+                        "\$${state.totalPrice * state.quantity} | Add to Cart",
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

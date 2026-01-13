@@ -1,132 +1,131 @@
 import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
+import 'package:ecommerce_app_food/core/share/bottom_nav_bar.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
-import 'package:ecommerce_app_food/core/utils/constans_app.dart';
-import 'package:ecommerce_app_food/features/CartScreens/logic/controller_carts.dart';
-import 'package:ecommerce_app_food/features/HomeScreens/UI/screens/home_page.dart';
+import 'package:ecommerce_app_food/features/CartScreens/logic/cubit/cart_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class HeaderIcon extends StatelessWidget {
-  HeaderIcon({
+  final IconData icon;
+  final bool isHomeIcons;
+  final Color? colorIcons;
+  final Color? background;
+  final Color? circleColor;
+  final bool cartIcons;
+  const HeaderIcon({
     super.key,
     required this.icon,
     required this.isHomeIcons,
     this.background,
     this.colorIcons,
+    this.circleColor,
+    this.cartIcons = true,
   });
-  final IconData icon;
-  bool isHomeIcons;
-  Color? colorIcons;
-  Color? background;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 90,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              height: 35,
-              width: 35,
-              decoration: BoxDecoration(
-                color: background ?? Color(0xFFfcf4e4),
-                borderRadius: BorderRadius.circular(35),
-              ),
-              child: Center(
-                child: Icon(
-                  icon,
-                  size: 15,
-                  color: colorIcons ?? Color(0xff756d54),
-                ),
-              ),
-            ),
+          // زر الرجوع
+          _buildCircleIcon(
+            icon: icon,
+            onTap: () => Navigator.pop(context), // استبدال Get.back()
           ),
-          isHomeIcons ? Gap(0) : Gap(120),
-          isHomeIcons
-              ? Container()
-              : GestureDetector(
-                  // onTap: () => Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (_) => HomePage()),
-                  // ),
-                  child: Container(
-                    height: 35,
-                    width: 35,
-                    decoration: BoxDecoration(
-                      color: background ?? Color(0xFFfcf4e4),
-                      borderRadius: BorderRadius.circular(35),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.home_outlined,
-                        size: 18,
-                        color: colorIcons ?? Color(0xff756d54),
-                      ),
-                    ),
-                  ),
-                ),
 
+          // زر الصفحة الرئيسية (يظهر فقط لو مش في الـ Home)
+          if (!isHomeIcons)
+            _buildCircleIcon(
+              icon: Icons.home_outlined,
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  RoutingHelper.initial,
+                  // (route) => false,
+                );
+
+                // لزيادة التأكيد إننا واقفين على أول تاب (الهوم)
+              },
+            ),
+
+          // أيقونة السلة مع الـ Badge
           GestureDetector(
-            onTap: () => Get.toNamed(RoutingHelper.cartScreens),
-            child: Container(
-              height: 35,
-              width: 35,
-              decoration: BoxDecoration(
-                color: background ?? Color(0xFFfcf4e4),
-                borderRadius: BorderRadius.circular(35),
-              ),
-              child: Stack(
-                children: [
-                  // 1. الأيقونة الأساسية (أو الـ Container اللي شايل الأيقونة عندك)
-                  Center(
-                    child: Icon(
-                      Icons.shopping_cart_outlined,
-                      size: 20,
-                      color:
-                          colorIcons ?? Color(0xff756d54), // أو أي لون تستخدمه
-                    ),
-                  ),
+            onTap: () => Navigator.pushNamed(
+              context,
+              RoutingHelper.cart,
+            ), // استبدال Get.toNamed
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                cartIcons
+                    ? _buildCircleIcon(icon: Icons.shopping_cart_outlined)
+                    : _buildCircleIcon(icon: Icons.shopping_cart),
 
-                  // 2. الـ Badge (الدائرة اللي فوق)
-                  GetBuilder<ControllerCarts>(
-                    builder: (cartController) {
-                      return cartController.totalItems >= 1
-                          ? Positioned(
-                              right: 0,
-                              top: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  color: AppColors
-                                      .mainColor, // اللون البرتقالي أو الأخضر بتاعك
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                constraints: const BoxConstraints(
-                                  minWidth: 16,
-                                  minHeight: 16,
-                                ),
-                                child: Text(
-                                  '${cartController.totalItems}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
+                // هنا هنستخدم BlocBuilder بدل GetBuilder للسلة
+                // ملحوظة: لو لسه معملتش CartCubit سيبها مؤقتاً أو استبدلها بـ BlocBuilder
+                cartIcons
+                    ? BlocBuilder<CartCubit, CartState>(
+                        builder: (context, state) {
+                          int total = context
+                              .read<CartCubit>()
+                              .totalItems; // افترض إن عندك totalItems في الحالة
+                          return total > 0
+                              ? Positioned(
+                                  right: 2,
+                                  top: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: circleColor ?? AppColors.mainColor,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    constraints: const BoxConstraints(
+                                      minWidth: 18,
+                                      minHeight: 18,
+                                    ),
+                                    child: Text(
+                                      '${total}', // استبدل '3' بـ state.totalItems لاحقاً
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            )
-                          : Container(); // لو السلة فاضية مش هيظهر حاجة
-                    },
-                  ),
-                ],
-              ),
+                                )
+                              : SizedBox.shrink();
+                        },
+                      )
+                    : SizedBox(),
+              ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // Widget مساعد عشان م نكررش كود الدائرة كتير
+  Widget _buildCircleIcon({required IconData icon, VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 40,
+        width: 40,
+        decoration: BoxDecoration(
+          color: background ?? const Color(0xFFfcf4e4),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+          color: colorIcons ?? const Color(0xff756d54),
+        ),
       ),
     );
   }

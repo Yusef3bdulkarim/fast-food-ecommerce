@@ -2,15 +2,14 @@ import 'package:ecommerce_app_food/core/utils/constans_app.dart';
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
 import 'package:ecommerce_app_food/core/share/header_icon.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
-import 'package:ecommerce_app_food/features/RecommendedScreens/logic/controller_ingredient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class BackgroundIngrdient extends StatelessWidget {
-  BackgroundIngrdient({super.key});
-  var product = Get.find<ControllerRecommend>().product;
+  final dynamic product;
+  BackgroundIngrdient({super.key, required this.product});
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(

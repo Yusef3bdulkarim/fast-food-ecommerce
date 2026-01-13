@@ -1,0 +1,150 @@
+import 'package:ecommerce_app_food/core/utils/colors.dart';
+import 'package:ecommerce_app_food/core/utils/constans_app.dart';
+import 'package:ecommerce_app_food/core/utils/costume_text.dart';
+import 'package:ecommerce_app_food/features/CartScreens/logic/cubit/cart_cubit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+
+class ListProductCart extends StatelessWidget {
+  const ListProductCart({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CartCubit, CartState>(
+      builder: (context, state) {
+        // تحويل قيم الـ Map إلى List من خلال الـ state
+        var productList = state.items.values.toList();
+
+        if (productList.isEmpty) {
+          return SliverFillRemaining(
+            child: Center(child: CostumeText(text: "السلة فارغة حالياً")),
+          );
+        }
+
+        return SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            final item = productList[index];
+            return Dismissible(
+              key: ValueKey(item.id),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 20),
+                decoration: BoxDecoration(
+                  color: Colors.redAccent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.delete, color: Colors.white, size: 30.sp),
+              ),
+              onDismissed: (direction) {
+                // استدعاء الحذف من الكيوبت
+                context.read<CartCubit>().removeItem(item.id!);
+              },
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  height: 115.h,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10.h,
+                    horizontal: 15.w,
+                  ),
+                  child: Row(
+                    children: [
+                      // صورة المنتج
+                      Container(
+                        height: 110.h,
+                        width: 110.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(19),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              "${ConstantsApp.baseUrl}${ConstantsApp.uploades}${item.img!}",
+                            ),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                      // بيانات المنتج
+                      Expanded(
+                        // استخدمنا Expanded لضمان عدم حدوث Overflow
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 5.h,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CostumeText(text: item.name!, fontSize: 16.sp),
+                              CostumeText(
+                                text: "spicy",
+                                color: AppColors.textColor,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // حساب السعر الإجمالي للمنتج الواحد
+                                  CostumeText(
+                                    text:
+                                        "\$${(item.price! * item.quantity!).toStringAsFixed(2)}",
+                                    color: Colors.redAccent,
+                                  ),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          // تقليل الكمية بمقدار 1
+                                          context.read<CartCubit>().addItems(
+                                            item.toProductModel(),
+                                            -1,
+                                          );
+                                        },
+                                        child: Icon(
+                                          Icons.remove,
+                                          size: 20.sp,
+                                          color: AppColors.mainColor,
+                                        ),
+                                      ),
+                                      Gap(10.w),
+                                      CostumeText(
+                                        text: "${item.quantity}",
+                                        fontSize: 16.sp,
+                                      ),
+                                      Gap(10.w),
+                                      GestureDetector(
+                                        onTap: () {
+                                          // زيادة الكمية بمقدار 1
+                                          context.read<CartCubit>().addItems(
+                                            item.toProductModel(),
+                                            1,
+                                          );
+                                        },
+                                        child: Icon(
+                                          Icons.add,
+                                          size: 20.sp,
+                                          color: AppColors.mainColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }, childCount: productList.length),
+        );
+      },
+    );
+  }
+}

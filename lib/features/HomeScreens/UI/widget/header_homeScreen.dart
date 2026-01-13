@@ -1,9 +1,7 @@
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
-import 'package:ecommerce_app_food/features/HomeScreens/logic/controller_popularProduct.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 class HeaderHomescreen extends StatelessWidget {
   const HeaderHomescreen({super.key});
@@ -37,21 +35,14 @@ class HeaderHomescreen extends StatelessWidget {
                 ),
               ],
             ),
-            GetBuilder<ControllerFood>(
-              init: Get.find<ControllerFood>(),
-              builder: (controller) {
-                return GestureDetector(
-                  child: Container(
-                    height: 45.h,
-                    width: 45.w,
-                    decoration: BoxDecoration(
-                      color: AppColors.mainColor,
-                      borderRadius: BorderRadius.circular(12.sp),
-                    ),
-                    child: Icon(Icons.search, color: Colors.white, size: 25.sp),
-                  ),
-                );
-              },
+            Container(
+              height: 40.h,
+              width: 45.w,
+              decoration: BoxDecoration(
+                color: AppColors.mainColor,
+                borderRadius: BorderRadius.circular(12.sp),
+              ),
+              child: Icon(Icons.search, color: Colors.white, size: 25.sp),
             ),
           ],
         ),

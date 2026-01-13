@@ -3,9 +3,7 @@ import 'package:ecommerce_app_food/core/network/api_error.dart';
 import 'package:ecommerce_app_food/core/network/api_exeption.dart';
 import 'package:ecommerce_app_food/core/network/api_serveces.dart';
 import 'package:ecommerce_app_food/core/utils/constans_app.dart';
-import 'package:ecommerce_app_food/core/network/dio_client.dart';
-import 'package:ecommerce_app_food/core/models/model_foodApp.dart';
-import 'package:get/get.dart';
+import 'package:ecommerce_app_food/features/HomeScreens/data/models/model_foodApp.dart';
 
 class RepoPopularproduct {
   final ApiServices apiServices;
@@ -16,13 +14,18 @@ class RepoPopularproduct {
       final response = await apiServices.getData(
         ConstantsApp.popularProductUrl,
       );
+
       if (response.statusCode == 200) {
-        var data = response.data['products'] as List;
+        // تحويل الـ List القادم من الـ JSON إلى List من الـ Model
+        final List data = response.data['products'];
         return data.map((item) => ProductModel.fromJson(item)).toList();
       } else {
-        throw Exception("فشل في جلب البيانات");
+        throw ApiError(
+          message: "Error fetching popular products: ${response.statusCode}",
+        );
       }
     } on DioException catch (e) {
+      // استخدام المعالجة الخاصة بك للـ Dio Errors
       throw ApiException.handleError(e);
     } catch (e) {
       throw ApiError(message: e.toString());

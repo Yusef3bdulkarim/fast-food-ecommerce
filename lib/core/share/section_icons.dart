@@ -1,6 +1,7 @@
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class SectionIcons extends StatelessWidget {
@@ -22,7 +23,7 @@ class SectionIcons extends StatelessWidget {
             ),
             CostumeText(
               text: "Normal",
-              fontSize: 14,
+              fontSize: 12.sp,
               color: AppColors.textColor,
             ),
           ],
@@ -36,7 +37,7 @@ class SectionIcons extends StatelessWidget {
             ),
             CostumeText(
               text: "1.7km",
-              fontSize: 14,
+              fontSize: 12.sp,
               color: AppColors.textColor,
             ),
           ],
@@ -50,10 +51,10 @@ class SectionIcons extends StatelessWidget {
             ),
             CostumeText(
               text: " 32min",
-              fontSize: 14,
+              fontSize: 12.sp,
               color: AppColors.textColor,
             ),
-            isGap ? Gap(20) : Gap(0),
+            isGap ? Gap(20.h) : Gap(0.h),
           ],
         ),
       ],
