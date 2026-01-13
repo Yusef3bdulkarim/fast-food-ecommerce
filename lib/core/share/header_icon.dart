@@ -1,10 +1,8 @@
 import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
-import 'package:ecommerce_app_food/core/share/bottom_nav_bar.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:ecommerce_app_food/features/CartScreens/logic/cubit/cart_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 
 class HeaderIcon extends StatelessWidget {
   final IconData icon;

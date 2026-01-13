@@ -1,5 +1,6 @@
 import 'package:ecommerce_app_food/core/share/bottom_nav_bar.dart';
 import 'package:ecommerce_app_food/features/CartScreens/UI/screens/cart_screen.dart';
+import 'package:ecommerce_app_food/features/CartScreens/UI/screens/cart_screen_nav_bar.dart';
 import 'package:ecommerce_app_food/features/HomeScreens/UI/screens/home_page.dart';
 import 'package:ecommerce_app_food/features/HomeScreens/logic/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class MainScreen extends StatelessWidget {
   static List<Widget> screens = [
     HomePage(),
     const Center(child: Text("archive")),
-    const CartScreen(),
+    CartScreenNavBar(),
     const Center(child: Text("Profile")),
   ];
   @override

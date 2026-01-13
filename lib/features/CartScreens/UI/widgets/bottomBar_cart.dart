@@ -50,7 +50,9 @@ class BottombarCart extends StatelessWidget {
                 ),
 
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    context.read<CartCubit>().cleanCartList();
+                  },
                   child: Container(
                     height: 47.h,
                     width: 120.w,

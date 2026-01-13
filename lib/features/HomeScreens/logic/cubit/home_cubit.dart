@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:ecommerce_app_food/features/HomeScreens/data/repo/repo_popularProduct.dart';
 import 'package:ecommerce_app_food/features/HomeScreens/data/repo/repo_recommended.dart';
-import 'package:flutter/material.dart';
 
 part 'home_state.dart';
 

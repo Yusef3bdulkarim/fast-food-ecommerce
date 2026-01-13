@@ -8,7 +8,18 @@ part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
   final CartRepo cartRepo;
-  CartCubit({required this.cartRepo}) : super(const CartState());
+  CartCubit({required this.cartRepo}) : super(const CartState()) {
+    getCardData();
+  }
+
+  void getCardData() {
+    List<CartModels> saveCartList = cartRepo.getCartList();
+    Map<int, CartModels> items = {};
+    for (var item in saveCartList) {
+      items.putIfAbsent(item.id!, () => item);
+    }
+    emit(state.copyWith(items: items));
+  }
 
   void addItems(ProductModel product, int quantity) {
     // نأخذ نسخة من الـ Map الحالية (لأن الأصلية immutable)
@@ -32,6 +43,10 @@ class CartCubit extends Cubit<CartState> {
             quantity: quantity,
             isExcited: true,
             time: DateTime.now().toString(),
+            description: product.description,
+            stars: product.stars,
+            location: product.location,
+            typeId: product.typeId,
           );
         });
       }
@@ -44,12 +59,14 @@ class CartCubit extends Cubit<CartState> {
     }
 
     emit(state.copyWith(items: updatedItems, lastUpdated: DateTime.now()));
+    cartRepo.addList(updatedItems.values.toList());
   }
 
   void removeItem(int productId) {
     final Map<int, CartModels> updatedItems = Map.from(state.items);
     updatedItems.remove(productId);
     emit(state.copyWith(items: updatedItems, lastUpdated: DateTime.now()));
+    cartRepo.addList(updatedItems.values.toList());
   }
 
   // Getters للحصول على المعلومات بسهولة في الـ UI
@@ -65,5 +82,9 @@ class CartCubit extends Cubit<CartState> {
       0.0,
       (sum, item) => sum + (item.price! * item.quantity!),
     );
+  }
+
+  void cleanCartList() {
+    emit(state.copyWith(items: {}, lastUpdated: DateTime.now()));
   }
 }

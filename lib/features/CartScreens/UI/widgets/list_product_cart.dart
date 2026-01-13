@@ -1,7 +1,10 @@
+import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:ecommerce_app_food/core/utils/constans_app.dart';
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
 import 'package:ecommerce_app_food/features/CartScreens/logic/cubit/cart_cubit.dart';
+import 'package:ecommerce_app_food/features/DetailsScreens/UI/screens/details_screen.dart';
+import 'package:ecommerce_app_food/features/RecommendedScreens/UI/screens/ingredient_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,7 +46,25 @@ class ListProductCart extends StatelessWidget {
                 context.read<CartCubit>().removeItem(item.id!);
               },
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  final product = item.toProductModel();
+                  if (item.typeId == 2) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            IngredientScreen(product: product),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailsScreen(product: product),
+                      ),
+                    );
+                  }
+                },
                 child: Container(
                   height: 115.h,
                   padding: EdgeInsets.symmetric(

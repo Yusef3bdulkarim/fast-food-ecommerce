@@ -1,4 +1,7 @@
-class ProductModel {
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:equatable/equatable.dart';
+
+class ProductModel extends Equatable {
   int? id;
   String? name;
   String? description;
@@ -36,4 +39,24 @@ class ProductModel {
     updatedAt = json['updated_at'];
     typeId = json['type_id'];
   }
+
+  @override
+  String toString() {
+    return 'ProductModel(id: $id, name: $name, description: $description, price: $price, stars: $stars, img: $img, location: $location, createdAt: $createdAt, updatedAt: $updatedAt, typeId: $typeId)';
+  }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+    id,
+    name,
+    description,
+    price,
+    stars,
+    img,
+    location,
+    createdAt,
+    updatedAt,
+    typeId,
+  ];
 }

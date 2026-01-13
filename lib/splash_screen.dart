@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,15 +16,25 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> animation;
   late AnimationController controller;
   @override
+  void dispose() {
+    controller.dispose(); // ⚡ مهم جدًا
+    super.dispose();
+  }
+
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
-    )..forward();
+      duration: const Duration(seconds: 3),
+    );
+
     animation = CurvedAnimation(parent: controller, curve: Curves.linear);
-    Timer(Duration(seconds: 3), () {
+
+    controller.forward();
+
+    Timer(const Duration(seconds: 3), () {
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, RoutingHelper.initial);
     });
@@ -40,11 +51,11 @@ class _SplashScreenState extends State<SplashScreen>
           ScaleTransition(
             scale: animation,
             child: Center(
-              child: Image.asset("assets/image/logo part 1.png", width: 250),
+              child: Image.asset("assets/image/logo part 1.png", width: 250.w),
             ),
           ),
           Center(
-            child: Image.asset("assets/image/logo part 2.png", width: 250),
+            child: Image.asset("assets/image/logo part 2.png", width: 250.w),
           ),
         ],
       ),

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 class BarDetails extends StatelessWidget {
   final ProductModel product;
@@ -56,17 +55,21 @@ class BarDetails extends StatelessWidget {
               // زر الإضافة
               GestureDetector(
                 onTap: () {
-                  if (state.quantity > 0) {
-                    // بنبعت الـ product والكمية اللي في الـ state للـ CartCubit
-                    context.read<CartCubit>().addItems(product, state.quantity);
-                  } else {
-                    Get.snackbar(
-                      "Warning",
-                      "Quantity must be more than 0",
-                      backgroundColor: Colors.amber,
-                      colorText: Colors.white,
-                    );
-                  }
+                  // 1. الوصول للـ CartCubit وإضافة المنتج
+                  // الـ product هنا هو اللي إنت ممرره للـ DetailsScreen
+                  context.read<CartCubit>().addItems(
+                    product,
+                    state.quantity, // الكمية اللي المستخدم اختارها دلوقت
+                  );
+
+                  // 2. حركة اختيارية: إظهار رسالة تأكيد للمستخدم
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("تم إضافة ${product.name} للسلة بنجاح!"),
+                      backgroundColor: AppColors.mainColor,
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
                 },
                 child: Container(
                   padding: EdgeInsets.all(15.w),

@@ -1,8 +1,6 @@
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:ecommerce_app_food/features/CartScreens/logic/cubit/cart_cubit.dart';
-import 'package:ecommerce_app_food/features/DetailsScreens/logic/cubit/product_details_cubit.dart'
-    show ProductDetailsCubit;
 import 'package:ecommerce_app_food/features/RecommendedScreens/logic/cubit/recommended_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

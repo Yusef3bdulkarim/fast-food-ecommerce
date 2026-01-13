@@ -1,5 +1,5 @@
 import 'package:ecommerce_app_food/features/DetailsScreens/logic/cubit/product_details_cubit.dart';
-import 'package:ecommerce_app_food/features/HomeScreens/logic/cubit/home_cubit.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

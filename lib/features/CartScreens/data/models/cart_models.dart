@@ -12,6 +12,10 @@ class CartModels extends Equatable {
   int? quantity;
   bool? isExcited;
   String? time;
+  String? description;
+  int? stars;
+  String? location;
+  int? typeId;
 
   CartModels({
     this.id,
@@ -21,7 +25,26 @@ class CartModels extends Equatable {
     this.quantity,
     this.isExcited,
     this.time,
+    this.description,
+    this.stars,
+    this.location,
+    this.typeId,
   });
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'img': img,
+      'quantity': quantity,
+      'isExcited': isExcited,
+      'time': time,
+      'description': description,
+      'stars': stars,
+      'location': location,
+      'type_id': typeId,
+    };
+  }
 
   CartModels.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -31,6 +54,10 @@ class CartModels extends Equatable {
     quantity = json['quantity'];
     isExcited = json['isExcited'];
     time = json['time'];
+    description = json['description'];
+    stars = json['stars'];
+    location = json['location'];
+    typeId = json['type_id'];
   }
   ProductModel toProductModel() {
     return ProductModel(
@@ -38,6 +65,10 @@ class CartModels extends Equatable {
       name: this.name,
       price: this.price,
       img: this.img,
+      description: description,
+      stars: stars,
+      location: location,
+      typeId: typeId,
     );
   }
 
@@ -51,6 +82,10 @@ class CartModels extends Equatable {
     quantity,
     isExcited,
     time,
+    description,
+    stars,
+    location,
+    typeId,
   ];
 
   CartModels copyWith({
@@ -61,6 +96,10 @@ class CartModels extends Equatable {
     int? quantity,
     bool? isExcited,
     String? time,
+    String? description,
+    int? stars,
+    String? location,
+    int? typeId,
   }) {
     return CartModels(
       id: id ?? this.id,
@@ -70,6 +109,13 @@ class CartModels extends Equatable {
       quantity: quantity ?? this.quantity,
       isExcited: isExcited ?? this.isExcited,
       time: time ?? this.time,
+      description: description ?? this.description,
+      stars: stars ?? this.stars,
+      location: location ?? this.location,
+      typeId: typeId ?? this.typeId,
     );
   }
+
+  @override
+  bool get stringify => true;
 }
