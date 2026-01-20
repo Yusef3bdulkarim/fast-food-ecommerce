@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:ecommerce_app_food/core/helpers/init_dependents.dart';
 import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
+import 'package:ecommerce_app_food/core/utils/constans_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController controller;
   @override
   void dispose() {
-    controller.dispose(); // ⚡ مهم جدًا
+    controller.dispose();
     super.dispose();
   }
 
@@ -36,7 +38,17 @@ class _SplashScreenState extends State<SplashScreen>
 
     Timer(const Duration(seconds: 3), () {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, RoutingHelper.initial);
+
+      // بنشيك على التوكن هنا جوه السبلاتش
+      final String? token = ServiceLocator.sharedPreferences.getString(
+        ConstantsApp.tokenKey,
+      );
+
+      if (token != null && token.isNotEmpty) {
+        Navigator.pushReplacementNamed(context, RoutingHelper.initial);
+      } else {
+        Navigator.pushReplacementNamed(context, RoutingHelper.loginIn);
+      }
     });
   }
 
