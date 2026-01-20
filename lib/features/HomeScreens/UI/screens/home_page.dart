@@ -10,12 +10,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 // ignore: must_be_immutable
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     context.read<HomeCubit>().getData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocBuilder<HomeCubit, HomeState>(
@@ -28,15 +39,12 @@ class HomePage extends StatelessWidget {
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  // 1. التثبيت: خليه true عشان لما يختفي الهيدر يفضل فيه "خط" رفيع أو خلفية بيضاء تحمي منطقة الـ Status Bar
                   pinned: true,
 
-                  // 2. الظهور التلقائي: خليه true عشان لو المستخدم سحب سحبة خفيفة لتحت يظهر له الهيدر تاني
                   floating: true,
 
                   snap: true,
 
-                  // 3. الارتفاع: ده مجموع ارتفاع الهيدر بتاعك (تقريباً 100-120 بكسل)
                   expandedHeight: 45.h,
 
                   backgroundColor: Colors.white,
@@ -47,10 +55,7 @@ class HomePage extends StatelessWidget {
                   surfaceTintColor: Colors.white,
                   automaticallyImplyLeading: false,
                   title: Padding(
-                    padding: EdgeInsets.only(
-                      top: 10.h,
-                      bottom: 15.h,
-                    ), // تظبيط مكان الهيدر
+                    padding: EdgeInsets.only(top: 10.h, bottom: 15.h),
                     child: HeaderHomescreen(),
                   ),
                   centerTitle: false,

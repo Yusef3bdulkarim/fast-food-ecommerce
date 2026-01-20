@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:ecommerce_app_food/features/HomeScreens/data/models/model_foodApp.dart';
 import 'package:ecommerce_app_food/features/CartScreens/data/models/cart_models.dart';
 import 'package:ecommerce_app_food/features/CartScreens/data/repo/cart_repo.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'cart_state.dart';
 
@@ -22,7 +22,6 @@ class CartCubit extends Cubit<CartState> {
   }
 
   void addItems(ProductModel product, int quantity) {
-    // نأخذ نسخة من الـ Map الحالية (لأن الأصلية immutable)
     final Map<int, CartModels> updatedItems = Map.from(state.items);
 
     if (updatedItems.containsKey(product.id)) {
@@ -52,7 +51,6 @@ class CartCubit extends Cubit<CartState> {
       }
     }
 
-    // حذف المنتج إذا أصبحت الكمية 0 أو أقل
     if (updatedItems.containsKey(product.id) &&
         updatedItems[product.id]!.quantity! <= 0) {
       updatedItems.remove(product.id);
@@ -69,7 +67,6 @@ class CartCubit extends Cubit<CartState> {
     cartRepo.addList(updatedItems.values.toList());
   }
 
-  // Getters للحصول على المعلومات بسهولة في الـ UI
   int get totalItems {
     return state.items.values.fold(
       0,

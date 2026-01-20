@@ -9,13 +9,12 @@ import 'package:ecommerce_app_food/features/DetailsScreens/UI/widgets/bottomBar_
 import 'package:ecommerce_app_food/features/DetailsScreens/UI/widgets/cont_details.dart';
 
 class DetailsScreen extends StatelessWidget {
-  final dynamic product; // استقبل المنتج نفسه مش الـ ID
+  final dynamic product;
   const DetailsScreen({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // استخدمنا ?? 0.0 عشان نضمن إن السعر لو نل التطبيق ما يقعش
       create: (context) =>
           ProductDetailsCubit()..initProduct((product.price ?? 0).toDouble()),
       child: Scaffold(

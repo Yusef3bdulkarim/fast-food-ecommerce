@@ -10,7 +10,6 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     emit(state.copyWith(totalPrice: price, quantity: 1));
   }
 
-  // داخل PopularProductCubit
   int _quantity = 0;
   int get quantity => _quantity;
   void setQuantity(bool isIncrement) {
@@ -26,7 +25,6 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
 
   void addQuantity(double unitPrice) {
     if (state.quantity < 20) {
-      // حد أقصى مثلاً
       int newQty = state.quantity + 1;
       emit(state.copyWith(quantity: newQty, totalPrice: newQty * unitPrice));
     }

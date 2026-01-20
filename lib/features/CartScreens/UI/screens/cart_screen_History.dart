@@ -1,3 +1,5 @@
+import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
+import 'package:ecommerce_app_food/core/share/box_is_empty.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:ecommerce_app_food/core/utils/constans_app.dart';
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
@@ -34,7 +36,18 @@ class CartScreenNavBar extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 20,
                   ),
-                  Icon(CupertinoIcons.cart, color: Colors.white, size: 30),
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(
+                      context,
+                      RoutingHelper.cart,
+                      // (route) => false,
+                    ),
+                    child: Icon(
+                      CupertinoIcons.cart,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -43,12 +56,19 @@ class CartScreenNavBar extends StatelessWidget {
             builder: (context, state) {
               final allItems = state.items.values.toList();
 
-              // 2. تجميع العناصر التي تمت في نفس "الدقيقة" (أو خلال دقيقتين)
+              if (allItems.isEmpty) {
+                return SliverFillRemaining(
+                  child: BoxIsEmpty(
+                    text: "Your Cart History is-Empty ! ",
+                    img: "assets/image/empty_box.png",
+                  ),
+                );
+              }
+
               Map<String, List<CartModels>> groupedItems = {};
 
               for (var item in allItems) {
                 final time = DateTime.parse(item.time!);
-                // التجميع هنا باليوم والساعة والدقيقة (عشان كل دقيقة تبقى مجموعة)
                 String timeKey = DateFormat('yyyy-MM-dd HH:mm').format(time);
 
                 if (!groupedItems.containsKey(timeKey)) {
@@ -64,7 +84,6 @@ class CartScreenNavBar extends StatelessWidget {
                   final timeKey = groupKeys[index];
                   final productsInGroup = groupedItems[timeKey]!;
 
-                  // حساب إجمالي المنتجات في هذه المجموعة
                   int totalItemsInGroup = productsInGroup.fold(
                     0,
                     (sum, item) => sum + item.quantity!,
@@ -98,7 +117,6 @@ class CartScreenNavBar extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // عرض الصور (بحد أقصى 3 صور)
                             Row(
                               children: productsInGroup.take(3).map((product) {
                                 return Container(
@@ -118,7 +136,6 @@ class CartScreenNavBar extends StatelessWidget {
                               }).toList(),
                             ),
 
-                            // عرض إجمالي عدد المنتجات في المجموعة
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -128,7 +145,7 @@ class CartScreenNavBar extends StatelessWidget {
                                   fontSize: 18,
                                   color: AppColors.mainColor,
                                 ),
-                                // زرار التفاصيل
+
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 8,

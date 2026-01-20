@@ -12,6 +12,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(slivers: [HeaderCart(), ListProductCart()]),
+
       bottomNavigationBar: BottombarCart(),
     );
   }

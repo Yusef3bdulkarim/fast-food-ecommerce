@@ -26,7 +26,6 @@ class BarDetails extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // العداد
               Container(
                 padding: EdgeInsets.all(10.w),
                 decoration: BoxDecoration(
@@ -52,24 +51,10 @@ class BarDetails extends StatelessWidget {
                   ],
                 ),
               ),
-              // زر الإضافة
+
               GestureDetector(
                 onTap: () {
-                  // 1. الوصول للـ CartCubit وإضافة المنتج
-                  // الـ product هنا هو اللي إنت ممرره للـ DetailsScreen
-                  context.read<CartCubit>().addItems(
-                    product,
-                    state.quantity, // الكمية اللي المستخدم اختارها دلوقت
-                  );
-
-                  // 2. حركة اختيارية: إظهار رسالة تأكيد للمستخدم
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("تم إضافة ${product.name} للسلة بنجاح!"),
-                      backgroundColor: AppColors.mainColor,
-                      duration: const Duration(seconds: 1),
-                    ),
-                  );
+                  context.read<CartCubit>().addItems(product, state.quantity);
                 },
                 child: Container(
                   padding: EdgeInsets.all(15.w),

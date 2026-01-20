@@ -18,10 +18,7 @@ class SectionDotsIndicator extends StatelessWidget {
       child: DotsIndicator(
         dotsCount: dotsCount == 0 ? 1 : dotsCount,
         position: currentIndex,
-        decorator: DotsDecorator(
-          activeColor: AppColors.mainColor,
-          // ... نفس التنسيقات بتاعتك
-        ),
+        decorator: DotsDecorator(activeColor: AppColors.mainColor),
       ),
     );
   }

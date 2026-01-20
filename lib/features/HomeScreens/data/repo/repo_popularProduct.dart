@@ -16,7 +16,6 @@ class RepoPopularproduct {
       );
 
       if (response.statusCode == 200) {
-        // تحويل الـ List القادم من الـ JSON إلى List من الـ Model
         final List data = response.data['products'];
         return data.map((item) => ProductModel.fromJson(item)).toList();
       } else {
@@ -25,7 +24,6 @@ class RepoPopularproduct {
         );
       }
     } on DioException catch (e) {
-      // استخدام المعالجة الخاصة بك للـ Dio Errors
       throw ApiException.handleError(e);
     } catch (e) {
       throw ApiError(message: e.toString());

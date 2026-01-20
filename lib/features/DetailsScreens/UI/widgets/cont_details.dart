@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class ContDetails extends StatelessWidget {
-  final dynamic product; // استبدله بـ ProductModel الخاص بك
+  final dynamic product;
   const ContDetails({super.key, required this.product});
 
   @override
@@ -28,15 +28,12 @@ class ContDetails extends StatelessWidget {
             children: [
               CostumeText(text: product.name.toString()),
               Gap(7.h),
-              // صف النجوم والتعليقات
               _buildRatingSection(product.stars ?? 1),
               Gap(15.h),
               SectionIcons(sizeIcons: 25.sp, isGap: true),
               Gap(15.h),
               CostumeText(text: "Introduce"),
               Gap(5.h),
-
-              // هنا بنستخدم الـ Cubit للتحكم في توسيع النص
               Expanded(
                 child: SingleChildScrollView(
                   child: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
@@ -93,7 +90,6 @@ class ContDetails extends StatelessWidget {
     );
   }
 
-  // دالة مساعدة لتقليل زحمة الكود
   Widget _buildRatingSection(int stars) {
     return Row(
       children: [

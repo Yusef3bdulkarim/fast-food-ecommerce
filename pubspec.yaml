@@ -43,6 +43,11 @@ dependencies:
   persistent_bottom_nav_bar: ^6.2.1
   shared_preferences: ^2.5.4
   intl: ^0.18.1
+  flutter_map: ^8.2.2
+  geolocator: ^14.0.2
+  geocoding: ^4.0.0
+  latlong2: ^0.9.1
+  webview_flutter: ^4.13.1
 
 dev_dependencies:
   flutter_test:

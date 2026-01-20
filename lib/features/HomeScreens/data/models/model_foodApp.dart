@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class ProductModel extends Equatable {
   int? id;
   String? name;
@@ -26,7 +27,6 @@ class ProductModel extends Equatable {
     this.typeId,
   });
 
-  // هذه الدالة هي الأهم: تحول الـ JSON القادم من Dio إلى كلاس Dart
   ProductModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];

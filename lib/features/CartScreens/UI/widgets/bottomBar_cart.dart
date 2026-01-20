@@ -10,70 +10,87 @@ class BottombarCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 10.h),
-          height: 90.h,
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(73, 158, 158, 158),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.r),
-              topRight: Radius.circular(30.r),
-            ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  height: 47.h,
-                  width: 150.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.r),
-                    color: Colors.white,
-                  ),
-                  child: BlocBuilder<CartCubit, CartState>(
-                    builder: (context, state) {
-                      return Center(
-                        child: CostumeText(
-                          text:
-                              "Total Price : ${context.read<CartCubit>().totalAmount}",
-                          color: Colors.redAccent,
-                          fontSize: 16.sp,
-                        ),
-                      );
-                    },
-                  ),
-                ),
+    return BlocBuilder<CartCubit, CartState>(
+      builder: (context, state) {
+        var productList = state.items.values.toList();
 
-                GestureDetector(
-                  onTap: () {
-                    context.read<CartCubit>().cleanCartList();
-                  },
-                  child: Container(
-                    height: 47.h,
-                    width: 120.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(17.r),
-                      color: AppColors.mainColor,
-                    ),
-                    child: Center(
-                      child: CostumeText(
-                        text: "Check Out",
+        if (productList.isEmpty) {
+          return Container(
+            height: 120,
+            // width: 100,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          );
+        }
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 10.h),
+              height: 90.h,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(73, 158, 158, 158),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.r),
+                  topRight: Radius.circular(30.r),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 47.h,
+                      width: 150.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.r),
                         color: Colors.white,
-                        fontSize: 16.sp,
+                      ),
+                      child: BlocBuilder<CartCubit, CartState>(
+                        builder: (context, state) {
+                          return Center(
+                            child: CostumeText(
+                              text:
+                                  "Total Price : ${context.read<CartCubit>().totalAmount}",
+                              color: Colors.redAccent,
+                              fontSize: 16.sp,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
+
+                    GestureDetector(
+                      onTap: () {
+                        context.read<CartCubit>().cleanCartList();
+                      },
+                      child: Container(
+                        height: 47.h,
+                        width: 120.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(17.r),
+                          color: AppColors.mainColor,
+                        ),
+                        child: Center(
+                          child: CostumeText(
+                            text: "Check Out",
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }

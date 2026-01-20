@@ -24,7 +24,6 @@ class RecommendedCubit extends Cubit<RecommendedState> {
 
   void addQuantity(double unitPrice) {
     if (state.quantity < 20) {
-      // حد أقصى مثلاً
       double newQty = state.quantity + 1;
       emit(state.copyWith(quantity: newQty, totalPrice: newQty * unitPrice));
     }

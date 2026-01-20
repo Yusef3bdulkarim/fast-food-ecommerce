@@ -14,18 +14,13 @@ class HeaderCart extends StatelessWidget {
       backgroundColor: Colors.white,
       elevation: 0,
       surfaceTintColor: Colors.white,
-      title: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: HeaderIcon(
-          icon: Icons.arrow_back_ios_new_outlined,
-          isHomeIcons: false,
-          circleColor: Colors.white,
-          cartIcons: false,
-          background: AppColors.mainColor,
-          colorIcons: Colors.white,
-        ),
+      title: HeaderIcon(
+        icon: Icons.arrow_back_ios_new_outlined,
+        isHomeIcons: false,
+        circleColor: Colors.white,
+        cartIcons: false,
+        background: AppColors.mainColor,
+        colorIcons: Colors.white,
       ),
     );
     // استبدال GetBuilder بـ BlocBuilder

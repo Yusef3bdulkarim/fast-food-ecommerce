@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BackgroundDetails extends StatelessWidget {
-  final dynamic product; // استبدل dynamic بنوع الـ Model بتاعك
+  final dynamic product;
   const BackgroundDetails({super.key, required this.product});
 
   @override

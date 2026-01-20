@@ -1,8 +1,10 @@
 import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:ecommerce_app_food/features/CartScreens/logic/cubit/cart_cubit.dart';
+import 'package:ecommerce_app_food/features/HomeScreens/logic/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HeaderIcon extends StatelessWidget {
   final IconData icon;
@@ -24,38 +26,38 @@ class HeaderIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      height: 90.h,
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // زر الرجوع
           _buildCircleIcon(
             icon: icon,
-            onTap: () => Navigator.pop(context), // استبدال Get.back()
+            onTap: () {
+              // داخل أيقونة الـ Back في الـ CartScreen
+
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              } else {
+                Navigator.pushReplacementNamed(context, RoutingHelper.initial);
+              }
+            },
           ),
 
-          // زر الصفحة الرئيسية (يظهر فقط لو مش في الـ Home)
           if (!isHomeIcons)
             _buildCircleIcon(
               icon: Icons.home_outlined,
               onTap: () {
-                Navigator.pushNamed(
-                  context,
+                context.read<HomeCubit>().changePageIndex(0);
+                Navigator.of(context).pushNamedAndRemoveUntil(
                   RoutingHelper.initial,
-                  // (route) => false,
+                  (route) => false,
                 );
-
-                // لزيادة التأكيد إننا واقفين على أول تاب (الهوم)
               },
             ),
 
-          // أيقونة السلة مع الـ Badge
           GestureDetector(
-            onTap: () => Navigator.pushNamed(
-              context,
-              RoutingHelper.cart,
-            ), // استبدال Get.toNamed
+            onTap: () => Navigator.pushNamed(context, RoutingHelper.cart),
             child: Stack(
               clipBehavior: Clip.none,
               children: [
@@ -73,23 +75,23 @@ class HeaderIcon extends StatelessWidget {
                               .totalItems; // افترض إن عندك totalItems في الحالة
                           return total > 0
                               ? Positioned(
-                                  right: 2,
+                                  right: 2.w,
                                   top: 0,
                                   child: Container(
-                                    padding: const EdgeInsets.all(4),
+                                    padding: EdgeInsets.all(4.h),
                                     decoration: BoxDecoration(
                                       color: circleColor ?? AppColors.mainColor,
                                       shape: BoxShape.circle,
                                     ),
-                                    constraints: const BoxConstraints(
-                                      minWidth: 18,
-                                      minHeight: 18,
+                                    constraints: BoxConstraints(
+                                      minWidth: 18.w,
+                                      minHeight: 18.h,
                                     ),
                                     child: Text(
                                       '${total}', // استبدل '3' بـ state.totalItems لاحقاً
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 10,
+                                        fontSize: 10.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       textAlign: TextAlign.center,
@@ -113,15 +115,15 @@ class HeaderIcon extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 40,
-        width: 40,
+        height: 40.h,
+        width: 40.w,
         decoration: BoxDecoration(
           color: background ?? const Color(0xFFfcf4e4),
           shape: BoxShape.circle,
         ),
         child: Icon(
           icon,
-          size: 18,
+          size: 18.sp,
           color: colorIcons ?? const Color(0xff756d54),
         ),
       ),

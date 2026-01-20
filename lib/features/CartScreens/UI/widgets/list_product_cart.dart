@@ -1,4 +1,4 @@
-import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
+import 'package:ecommerce_app_food/core/share/box_is_empty.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:ecommerce_app_food/core/utils/constans_app.dart';
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
@@ -17,12 +17,11 @@ class ListProductCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CartCubit, CartState>(
       builder: (context, state) {
-        // تحويل قيم الـ Map إلى List من خلال الـ state
         var productList = state.items.values.toList();
 
         if (productList.isEmpty) {
           return SliverFillRemaining(
-            child: Center(child: CostumeText(text: "السلة فارغة حالياً")),
+            child: BoxIsEmpty(text: "Your Cart is-Empty ! "),
           );
         }
 
@@ -42,7 +41,6 @@ class ListProductCart extends StatelessWidget {
                 child: Icon(Icons.delete, color: Colors.white, size: 30.sp),
               ),
               onDismissed: (direction) {
-                // استدعاء الحذف من الكيوبت
                 context.read<CartCubit>().removeItem(item.id!);
               },
               child: GestureDetector(
@@ -66,17 +64,16 @@ class ListProductCart extends StatelessWidget {
                   }
                 },
                 child: Container(
-                  height: 115.h,
+                  height: 100.h,
                   padding: EdgeInsets.symmetric(
                     vertical: 10.h,
                     horizontal: 15.w,
                   ),
                   child: Row(
                     children: [
-                      // صورة المنتج
                       Container(
-                        height: 110.h,
-                        width: 110.w,
+                        height: 105.h,
+                        width: 100.w,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(19),
                           image: DecorationImage(
@@ -87,9 +84,8 @@ class ListProductCart extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // بيانات المنتج
+
                       Expanded(
-                        // استخدمنا Expanded لضمان عدم حدوث Overflow
                         child: Container(
                           padding: EdgeInsets.symmetric(
                             horizontal: 10.w,
@@ -108,7 +104,6 @@ class ListProductCart extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  // حساب السعر الإجمالي للمنتج الواحد
                                   CostumeText(
                                     text:
                                         "\$${(item.price! * item.quantity!).toStringAsFixed(2)}",
@@ -118,7 +113,6 @@ class ListProductCart extends StatelessWidget {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          // تقليل الكمية بمقدار 1
                                           context.read<CartCubit>().addItems(
                                             item.toProductModel(),
                                             -1,
@@ -138,7 +132,6 @@ class ListProductCart extends StatelessWidget {
                                       Gap(10.w),
                                       GestureDetector(
                                         onTap: () {
-                                          // زيادة الكمية بمقدار 1
                                           context.read<CartCubit>().addItems(
                                             item.toProductModel(),
                                             1,

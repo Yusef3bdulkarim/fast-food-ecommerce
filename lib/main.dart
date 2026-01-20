@@ -1,13 +1,12 @@
 import 'package:ecommerce_app_food/core/helpers/init_dependents.dart';
-import 'package:ecommerce_app_food/core/network/api_serveces.dart';
-import 'package:ecommerce_app_food/core/network/dio_client.dart';
 import 'package:ecommerce_app_food/core/routing/app_routing.dart';
 import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
-import 'package:ecommerce_app_food/core/utils/constans_app.dart';
 import 'package:ecommerce_app_food/features/CartScreens/logic/cubit/cart_cubit.dart';
 import 'package:ecommerce_app_food/features/HomeScreens/data/repo/repo_popularProduct.dart';
 import 'package:ecommerce_app_food/features/HomeScreens/logic/cubit/home_cubit.dart';
 import 'package:ecommerce_app_food/features/HomeScreens/data/repo/repo_recommended.dart';
+import 'package:ecommerce_app_food/features/auth/logic/cubit/auth_cubit.dart';
+import 'package:ecommerce_app_food/features/location/logic/cubit/location_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,34 +15,36 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ServiceLocator.init();
-  final dioClient = DioClient(appBaseUrl: ConstantsApp.baseUrl);
-  final apiService = ApiServices(dioClient);
-  final popularRepo = RepoPopularproduct(apiServices: apiService);
-  final recommendedRepo = RepoRecommendedproduct(apiServices: apiService);
-  // final cartRepo = CartRepo(sharedPreferences: );
-
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider<HomeCubit>(
           create: (context) => HomeCubit(
-            repoPopularproduct: popularRepo,
-            repoRecommendedProduct: recommendedRepo,
+            repoPopularproduct: RepoPopularproduct(
+              apiServices: ServiceLocator.apiServices,
+            ),
+            repoRecommendedProduct: RepoRecommendedproduct(
+              apiServices: ServiceLocator.apiServices,
+            ),
           )..getData(),
         ),
 
         BlocProvider<CartCubit>(
-          create: (context) => CartCubit(
-            cartRepo: ServiceLocator.cartRepo,
-          ), // تأكد من تمرير الـ repo
+          create: (context) => CartCubit(cartRepo: ServiceLocator.cartRepo),
         ),
+
+        BlocProvider<AuthCubit>(
+          create: (context) => AuthCubit(ServiceLocator.authRepo),
+        ),
+        BlocProvider<LocationCubit>(create: (context) => LocationCubit()),
       ],
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  // final bool isLoggedIn;
   const MyApp({super.key});
 
   @override
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           onGenerateRoute: AppRouter().onGenerateRoute,
-          // home: SplashScreen(),
+          // home: const SignupScreen(),
           initialRoute: RoutingHelper.splashScreen,
         );
       },

@@ -20,7 +20,6 @@ class SlideBackground extends StatefulWidget {
 
 class _SlideBackgroundState extends State<SlideBackground> {
   late PageController _pageController;
-  // 1. هنستخدم المتغير ده عشان نحدث الواجهة مع كل حركة صباع
   double _currPageValue = 0.0;
 
   @override
@@ -30,10 +29,9 @@ class _SlideBackgroundState extends State<SlideBackground> {
 
     _pageController.addListener(() {
       setState(() {
-        // 2. تحديث القيمة اللحظية للسكرول
         _currPageValue = _pageController.page!;
       });
-      // تحديث الكيوبت عشان النقط (Dots)
+
       context.read<HomeCubit>().updatePageIndictor(_currPageValue);
     });
   }
@@ -48,7 +46,7 @@ class _SlideBackgroundState extends State<SlideBackground> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 350.h,
-      // 3. شلنا الـ BlocBuilder من هنا عشان نعتمد على الـ setState اللحظي للحركة
+
       child: PageView.builder(
         controller: _pageController,
         itemCount: widget.popularProducts.length,
@@ -60,29 +58,24 @@ class _SlideBackgroundState extends State<SlideBackground> {
   }
 
   Widget _buildPageItem(int index) {
-    // 4. الحسبة السحرية للـ Scale والـ Translation
     Matrix4 matrix = Matrix4.identity();
 
     if (index == _currPageValue.floor()) {
-      // الكارت الحالي
       double currScale = 1 - (_currPageValue - index) * (1 - 0.85);
       double currTrans = 350.h * (1 - currScale) / 2;
       matrix = Matrix4.diagonal3Values(1, currScale, 1)
         ..setTranslationRaw(0, currTrans, 0);
     } else if (index == _currPageValue.floor() + 1) {
-      // الكارت التالي
       double currScale = 0.85 + (_currPageValue - index + 1) * (1 - 0.85);
       double currTrans = 350.h * (1 - currScale) / 2;
       matrix = Matrix4.diagonal3Values(1, currScale, 1)
         ..setTranslationRaw(0, currTrans, 0);
     } else if (index == _currPageValue.floor() - 1) {
-      // الكارت السابق
       double currScale = 1 - (_currPageValue - index) * (1 - 0.85);
       double currTrans = 350.h * (1 - currScale) / 2;
       matrix = Matrix4.diagonal3Values(1, currScale, 1)
         ..setTranslationRaw(0, currTrans, 0);
     } else {
-      // الكروت البعيدة جداً
       double currScale = 0.85;
       matrix = Matrix4.diagonal3Values(1, currScale, 1)
         ..setTranslationRaw(0, 350.h * (1 - 0.85) / 2, 0);
@@ -91,10 +84,8 @@ class _SlideBackgroundState extends State<SlideBackground> {
     return Transform(
       transform: matrix,
       child: Opacity(
-        // الشفافية مرتبطة بالسكيل عشان المنظر يبقى احترافي
         opacity: (matrix.getRow(1)[1]).clamp(0.8, 1.0),
         child: GestureDetector(
-          // جوه الـ onTap في صفحة الهوم
           onTap: () {
             Navigator.of(context, rootNavigator: true).push(
               MaterialPageRoute(
@@ -106,7 +97,6 @@ class _SlideBackgroundState extends State<SlideBackground> {
           child: Center(
             child: Stack(
               children: [
-                // خلفية الكارد
                 Container(
                   height: 300.h,
                   width: 350.w,
@@ -114,7 +104,7 @@ class _SlideBackgroundState extends State<SlideBackground> {
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),
-                // الصورة
+
                 Positioned(
                   child: Container(
                     height: 220.h,
@@ -131,7 +121,7 @@ class _SlideBackgroundState extends State<SlideBackground> {
                     ),
                   ),
                 ),
-                // كارد المعلومات الأبيض
+
                 Positioned(
                   bottom: 20.h,
                   left: 30.w,
@@ -145,11 +135,8 @@ class _SlideBackgroundState extends State<SlideBackground> {
       ),
     );
   }
-
-  // الـ _buildInfoCard بتاعك يفضل زي ما هو
 }
 
-// Widget فرعي لتنظيم الكود (كارد المعلومات)
 Widget _buildInfoCard(dynamic product) {
   return Container(
     height: 120.h,
