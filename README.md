@@ -19,17 +19,18 @@ A premium Food Delivery application built with **Flutter**. This project demonst
 ### 🏠 Discovery & Ordering
 | Home Screen | Categories | Food Details |
 |:---:|:---:|:---:|
-| <img src="screenShots/image1.png" width="210"> | <img src="screenShots/image2.png" width="210"> |
-
-### 📍 Location & Maps
-| Address Selection | Interactive Map | Delivery Details |
-|:---:|:---:|:---:|
-| <img src="screenShots/image4.png" width="210"> | 
+| <img src="screenShots/image1.png" width="210"> | <img src="screenShots/image2.png" width="210"> |<img src="screenShots/image11.png" width="210"> |
 
 ### 🛒 Cart & User Profile
-| My Cart | User Profile | Image Picker (Camera) |
-|:---:|:---:|:---:|
-| <img src="screenShots/image3.png" width="210"> | <img src="screenShots/image5.png" width="210"> | <img src="screenShots/image6.png" width="210"> |<img src="screenShots/image10.png" width="210"> |
+| My Cart | Cart History |  User Profile | Image Picker (Camera) |
+|:---:|:---:|:---:|:---:|
+| <img src="screenShots/image5.png" width="210"> | <img src="screenShots/image3.png" width="210"> | <img src="screenShots/image6.png" width="210"> |<img src="screenShots/image10.png" width="210"> |
+
+### 📍 Location & Maps
+| Address Selection |
+|:---:|
+| <img src="screenShots/image4.png" width="210"> | 
+
 
 ---
 
