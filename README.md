@@ -17,7 +17,7 @@ A premium Food Delivery application built with **Flutter**. This project demonst
 | <img src="screenShots/image9.png" width="210"> | <img src="screenShots/image8.png" width="210"> | <img src="screenShots/image7.png" width="210"> |
 
 ### 🏠 Discovery & Ordering
-| Home Screen | Categories | Food Details |
+| Home Screen | Food Recommened | Food Details |
 |:---:|:---:|:---:|
 | <img src="screenShots/image1.png" width="210"> | <img src="screenShots/image2.png" width="210"> |<img src="screenShots/image11.png" width="210"> |
 
