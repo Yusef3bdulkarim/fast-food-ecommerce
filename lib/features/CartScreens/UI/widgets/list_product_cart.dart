@@ -78,7 +78,7 @@ class ListProductCart extends StatelessWidget {
                           borderRadius: BorderRadius.circular(19),
                           image: DecorationImage(
                             image: NetworkImage(
-                              "${ConstantsApp.baseUrl}${ConstantsApp.uploades}${item.img!}",
+                              "${ConstantsApp.baseUrl}${ConstantsApp.uploades}${item.img ?? "assets/image/food1.png"}",
                             ),
                             fit: BoxFit.fill,
                           ),

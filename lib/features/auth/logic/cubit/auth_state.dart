@@ -32,10 +32,11 @@ final class ProfileLoading extends AuthState {}
 
 final class ProfileSuccess extends AuthState {
   final ModelBodyProfile model;
+  final String? localImagePath;
 
-  ProfileSuccess({required this.model});
+  ProfileSuccess({this.localImagePath, required this.model});
   @override
-  List<Object> get props => [model];
+  List<Object> get props => [model, localImagePath ?? ""];
 }
 
 final class ProfileEror extends AuthState {

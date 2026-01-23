@@ -2,15 +2,19 @@
 part of 'home_cubit.dart';
 
 abstract class HomeState extends Equatable {
-  const HomeState();
-
+  final int pageIndex; // ضيف الاندكس هنا
+  const HomeState({this.pageIndex = 0});
   @override
   List<Object> get props => [];
 }
 
-class HomeInitialState extends HomeState {}
+class HomeInitialState extends HomeState {
+  const HomeInitialState({super.pageIndex});
+}
 
-class HomeLoadingState extends HomeState {}
+class HomeLoadingState extends HomeState {
+  HomeLoadingState({super.pageIndex});
+}
 
 class HomeSuccessState extends HomeState {
   final List<dynamic> popularProducts;

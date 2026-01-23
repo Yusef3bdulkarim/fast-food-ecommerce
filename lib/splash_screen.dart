@@ -39,7 +39,6 @@ class _SplashScreenState extends State<SplashScreen>
     Timer(const Duration(seconds: 3), () {
       if (!mounted) return;
 
-      // بنشيك على التوكن هنا جوه السبلاتش
       final String? token = ServiceLocator.sharedPreferences.getString(
         ConstantsApp.tokenKey,
       );

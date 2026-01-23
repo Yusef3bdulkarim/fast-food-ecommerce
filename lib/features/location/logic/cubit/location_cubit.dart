@@ -137,7 +137,7 @@ class LocationCubit extends Cubit<LocationState> {
       }
       emit(LocationSuccess(currentAddress, currentPosition!));
     } catch (e) {
-      debugPrint("❌ Error loading saved location: $e");
+      print(e);
     }
   }
 

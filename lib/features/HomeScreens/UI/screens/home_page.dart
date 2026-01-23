@@ -20,7 +20,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<HomeCubit>().getData();
   }
@@ -40,18 +39,11 @@ class _HomePageState extends State<HomePage> {
               slivers: [
                 SliverAppBar(
                   pinned: true,
-
                   floating: true,
-
                   snap: true,
-
                   expandedHeight: 45.h,
-
                   backgroundColor: Colors.white,
-
                   elevation: 0,
-
-                  // shadowColor: AppColors.mainColor,
                   surfaceTintColor: Colors.white,
                   automaticallyImplyLeading: false,
                   title: Padding(
@@ -87,6 +79,7 @@ class _HomePageState extends State<HomePage> {
                 SectionSlideCard(
                   recommendedProducts: state.recommendedProducts,
                 ),
+                SliverToBoxAdapter(child: Gap(60.h)),
               ],
             );
           } else if (state is HomeErrorState) {

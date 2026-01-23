@@ -23,12 +23,20 @@ class ApiServices {
 
   Future<Response> postData(String url, Map<String, dynamic> body) async {
     try {
+      print("API START: Sending to $url");
       Response response = await _dioClient.dio.post(url, data: body);
       return response;
     } on DioException catch (e) {
-      throw ApiException.handleError(e);
+      print("DIO ERROR DETECTED: ${e.type}");
+      if (e.response != null) {
+        // هنا السر! السيرفر رد فعلاً بس فيه مشكلة في البيانات
+        print("SERVER ERROR BODY: ${e.response?.data}");
+        return e.response!; // رجع الرد عشان الكيوبت ميفصلش
+      }
+      throw e;
     } catch (e) {
-      throw ApiError(message: e.toString());
+      print("GENERAL ERROR IN API_SERVICES: $e");
+      rethrow;
     }
   }
 }

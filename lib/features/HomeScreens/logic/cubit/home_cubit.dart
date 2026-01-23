@@ -30,6 +30,7 @@ class HomeCubit extends Cubit<HomeState> {
           popularProducts: result[0],
           recommendedProducts: result[1],
           currentIndex: 0.0,
+          pageIndex: pageIndex,
         ),
       );
     } catch (e) {
@@ -45,9 +46,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   void changePageIndex(int index) {
     pageIndex = index;
-
     if (state is HomeSuccessState) {
       emit((state as HomeSuccessState).copyWith(pageIndex: index));
+    } else {
+      emit(HomeInitialState());
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:ecommerce_app_food/features/auth/models/data/model_body_loginIn.
 import 'package:ecommerce_app_food/features/auth/models/data/model_body_profile.dart';
 import 'package:ecommerce_app_food/features/auth/models/repo/auth_repo.dart';
 import 'package:equatable/equatable.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'auth_state.dart';
 
@@ -29,12 +30,16 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(LoginLoading());
     try {
-      String? savedPhone = authRepo.sharedPreferences.getString(
-        ConstantsApp.phoneKey,
-      );
       LoginBodyModel model = LoginBodyModel(phone: phone, password: password);
-      await authRepo.login(model);
-      emit(LoginSuccess());
+
+      // بنستنى النتيجة من الـ Repo
+      bool isSuccess = await authRepo.login(model);
+
+      if (isSuccess) {
+        emit(LoginSuccess());
+      } else {
+        emit(LoginEror(message: "Invalid phone or password"));
+      }
     } catch (e) {
       emit(LoginEror(message: e.toString()));
     }
@@ -45,7 +50,10 @@ class AuthCubit extends Cubit<AuthState> {
     emit(ProfileLoading());
     try {
       final userModel = await authRepo.getDataInfo();
-      emit(ProfileSuccess(model: userModel));
+      String? savedPath = authRepo.sharedPreferences.getString(
+        'user_image_path',
+      );
+      emit(ProfileSuccess(model: userModel, localImagePath: savedPath));
     } catch (e) {
       emit(ProfileEror(message: e.toString()));
     }
@@ -54,5 +62,43 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> logOut() async {
     await authRepo.logOut();
     emit(AuthInitial());
+  }
+
+  final ImagePicker _picker = ImagePicker();
+  // جوه كلاس AuthCubit
+  bool _isPickerActive = false; // متغير لحماية الميثود
+
+  Future<void> pickAndSaveImage() async {
+    if (_isPickerActive) return;
+
+    _isPickerActive = true;
+
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 50,
+      );
+
+      if (image != null) {
+        await authRepo.sharedPreferences.setString(
+          ConstantsApp.imageKey,
+          image.path,
+        );
+
+        if (state is ProfileSuccess) {
+          final currentState = state as ProfileSuccess;
+          emit(
+            ProfileSuccess(
+              model: currentState.model,
+              localImagePath: image.path,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+    } finally {
+      _isPickerActive = false; // فك الحماية سواء نجحت أو فشلت
+    }
   }
 }

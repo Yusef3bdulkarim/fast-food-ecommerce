@@ -30,28 +30,32 @@ class AuthRepo {
     }
   }
 
-  Future<void> login(LoginBodyModel loginBodyModel) async {
+  Future<bool> login(LoginBodyModel loginBodyModel) async {
     try {
       final response = await apiServices.postData(
-        ConstantsApp.loginUrl, // تأكد من إضافة الرابط في Constants
+        ConstantsApp.loginUrl,
         loginBodyModel.toMap(),
       );
 
-      // لو الـ API رجع Token بنخزنه فوراً
-      if (response.data['token'] != null) {
+      // التحقق: هل الـ Response فيه داتا؟ وهل الـ Token موجود؟
+      if (response.statusCode == 200 && response.data['token'] != null) {
         await sharedPreferences.setString(
           ConstantsApp.tokenKey,
           response.data['token'],
         );
-      }
-      if (response.data['phone'] != null) {
-        await sharedPreferences.setString(
-          ConstantsApp.phoneKey,
-          response.data['phone'].toString(),
-        );
+
+        if (response.data['phone'] != null) {
+          await sharedPreferences.setString(
+            ConstantsApp.phoneKey,
+            response.data['phone'].toString(),
+          );
+        }
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
-      throw ApiError(message: e.toString());
+      throw ApiError(message: "Invalid phone or password");
     }
   }
 
@@ -69,5 +73,7 @@ class AuthRepo {
     apiServices.dioClient.dio.options.headers.remove('Authorization');
     await sharedPreferences.remove(ConstantsApp.phoneKey);
     await sharedPreferences.remove(ConstantsApp.cartListKey);
+    await sharedPreferences.remove(ConstantsApp.imageKey);
+    await sharedPreferences.remove(ConstantsApp.addressKey);
   }
 }

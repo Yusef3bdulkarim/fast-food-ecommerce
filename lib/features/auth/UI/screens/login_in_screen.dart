@@ -1,6 +1,7 @@
 import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
+import 'package:ecommerce_app_food/features/HomeScreens/logic/cubit/home_cubit.dart';
 import 'package:ecommerce_app_food/features/auth/UI/widgets/custom_auth_feild.dart';
 import 'package:ecommerce_app_food/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,6 @@ class _SignupScreenState extends State<LoginInScreen> {
 
   @override
   void dispose() {
-    // تنظيف الـ Controllers من الذاكرة
-
     _phoneController.dispose();
     _passwordController.dispose();
 
@@ -79,7 +78,6 @@ class _SignupScreenState extends State<LoginInScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Gap(20),
-
                       CustomAuthField(
                         colorIcon: AppColors.yellowColor,
                         hintText: "Phone",
@@ -90,7 +88,6 @@ class _SignupScreenState extends State<LoginInScreen> {
                             v!.length < 11 ? "phone isn't correct" : null,
                       ),
                       Gap(15.h),
-
                       CustomAuthField(
                         colorIcon: AppColors.iconColor1,
                         hintText: "Password",
@@ -100,10 +97,30 @@ class _SignupScreenState extends State<LoginInScreen> {
                         validator: (v) =>
                             v!.length < 6 ? "Password isn't correct" : null,
                       ),
+                      Gap(10.h),
+                      GestureDetector(
+                        onTap: () {
+                          context.read<HomeCubit>().changePageIndex(0);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            RoutingHelper.initial,
+                            (route) => false,
+                          );
+                        },
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: CostumeText(
+                            text: "Continue as Guest?",
+                            color: AppColors.mainColor,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ),
                       Gap(30.h),
                       BlocConsumer<AuthCubit, AuthState>(
                         listener: (context, state) {
                           if (state is LoginSuccess) {
+                            context.read<HomeCubit>().changePageIndex(0);
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               RoutingHelper.initial,

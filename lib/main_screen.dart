@@ -10,7 +10,7 @@ class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
   static List<Widget> screens = [
     HomePage(),
-    const Center(child: Text("archive")),
+    // const Center(child: Text("archive")),
     CartScreenNavBar(),
     const ProfileScreen(),
   ];
@@ -18,8 +18,16 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        int currentIndex = context.watch<HomeCubit>().pageIndex;
+        // int currentIndex = context.watch<HomeCubit>().pageIndex;
+        int currentIndex = 0;
+        if (state is HomeSuccessState) {
+          currentIndex = state.pageIndex;
+        } else {
+          currentIndex = context.read<HomeCubit>().pageIndex;
+        }
         return Scaffold(
+          backgroundColor: Colors.transparent,
+          extendBody: true,
           body: IndexedStack(index: currentIndex, children: MainScreen.screens),
           bottomNavigationBar: BottomNavBar(),
         );

@@ -11,6 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+// ... (الواردات كما هي)
+
 class CartScreenNavBar extends StatelessWidget {
   CartScreenNavBar({super.key});
 
@@ -37,12 +39,9 @@ class CartScreenNavBar extends StatelessWidget {
                     fontSize: 20,
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.pushNamed(
-                      context,
-                      RoutingHelper.cart,
-                      // (route) => false,
-                    ),
-                    child: Icon(
+                    onTap: () =>
+                        Navigator.pushNamed(context, RoutingHelper.cart),
+                    child: const Icon(
                       CupertinoIcons.cart,
                       color: Colors.white,
                       size: 30,
@@ -58,18 +57,27 @@ class CartScreenNavBar extends StatelessWidget {
 
               if (allItems.isEmpty) {
                 return SliverFillRemaining(
+                  hasScrollBody: false, // مهم جداً داخل CustomScrollView
                   child: BoxIsEmpty(
-                    text: "Your Cart History is-Empty ! ",
+                    text: "Your Cart History is Empty!",
                     img: "assets/image/empty_box.png",
                   ),
                 );
               }
 
+              // ✅ تحسين عملية التجميع ومعالجة الوقت بشكل آمن
               Map<String, List<CartModels>> groupedItems = {};
 
               for (var item in allItems) {
-                final time = DateTime.parse(item.time!);
-                String timeKey = DateFormat('yyyy-MM-dd HH:mm').format(time);
+                String timeKey = "Unknown Date";
+                if (item.time != null && item.time!.isNotEmpty) {
+                  try {
+                    final time = DateTime.parse(item.time!);
+                    timeKey = DateFormat('yyyy-MM-dd HH:mm').format(time);
+                  } catch (e) {
+                    timeKey = "Invalid Date";
+                  }
+                }
 
                 if (!groupedItems.containsKey(timeKey)) {
                   groupedItems[timeKey] = [];
@@ -84,9 +92,10 @@ class CartScreenNavBar extends StatelessWidget {
                   final timeKey = groupKeys[index];
                   final productsInGroup = groupedItems[timeKey]!;
 
+                  // ✅ استخدام الـ ?? 0 لضمان عدم حدوث null crash
                   int totalItemsInGroup = productsInGroup.fold(
                     0,
-                    (sum, item) => sum + item.quantity!,
+                    (sum, item) => sum + (item.quantity ?? 0),
                   );
 
                   return Container(
@@ -94,7 +103,7 @@ class CartScreenNavBar extends StatelessWidget {
                       vertical: 10.h,
                       horizontal: 10.w,
                     ),
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15.r),
@@ -119,6 +128,14 @@ class CartScreenNavBar extends StatelessWidget {
                           children: [
                             Row(
                               children: productsInGroup.take(3).map((product) {
+                                // ✅ معالجة الصورة بشكل آمن
+                                String imageUrl = "";
+                                if (product.img != null &&
+                                    product.img!.isNotEmpty) {
+                                  imageUrl =
+                                      "${ConstantsApp.baseUrl}${ConstantsApp.uploades}${product.img!.split(',')[0]}";
+                                }
+
                                 return Container(
                                   margin: EdgeInsets.only(right: 5.w),
                                   height: 70.h,
@@ -126,16 +143,16 @@ class CartScreenNavBar extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.r),
                                     image: DecorationImage(
-                                      image: NetworkImage(
-                                        "${ConstantsApp.baseUrl}${ConstantsApp.uploades}${product.img!.split(',')[0]}",
-                                      ),
+                                      image: NetworkImage(imageUrl),
                                       fit: BoxFit.cover,
+                                      // إضافة صورة افتراضية في حال فشل التحميل
+                                      onError: (exception, stackTrace) =>
+                                          const Icon(Icons.fastfood),
                                     ),
                                   ),
                                 );
                               }).toList(),
                             ),
-
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -145,9 +162,8 @@ class CartScreenNavBar extends StatelessWidget {
                                   fontSize: 18,
                                   color: AppColors.mainColor,
                                 ),
-
                                 Container(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                     horizontal: 8,
                                     vertical: 2,
                                   ),

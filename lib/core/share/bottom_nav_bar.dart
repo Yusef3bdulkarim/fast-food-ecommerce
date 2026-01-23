@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
@@ -13,58 +14,39 @@ class BottomNavBar extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return Container(
-          height: 80.h,
+          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+
+          // بيخليه طاير
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(2.r),
-              topRight: Radius.circular(50).r,
-            ),
+            borderRadius: BorderRadius.circular(30.r), // زوايا دائرية بالكامل
             boxShadow: [
-              BoxShadow(
-                color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.3),
-                spreadRadius: 5.sp,
-                blurRadius: 15.sp,
-                offset: const Offset(-1, -2), // changes position of shadow
-              ),
+              BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1)),
             ],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(2.r),
-              topRight: Radius.circular(50.r),
-            ),
-            child: BottomNavigationBar(
-              currentIndex: context.watch<HomeCubit>().pageIndex,
-              onTap: (value) {
-                context.read<HomeCubit>().changePageIndex(value);
-              },
-              selectedItemColor: AppColors.mainColor,
-              unselectedItemColor: Colors.grey.shade400,
-              selectedFontSize: 14.sp,
-              unselectedFontSize: 13.sp,
-
-              type: BottomNavigationBarType.fixed,
-              showUnselectedLabels: true,
-              backgroundColor: Colors.white,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.home),
-                  label: "Home",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.archivebox_fill),
-                  label: "Archive",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.cart_fill),
-                  label: "Cart",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.person_fill),
-                  label: "Profile",
-                ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 8.h),
+            child: GNav(
+              rippleColor: Colors.grey[300]!,
+              hoverColor: Colors.grey[100]!,
+              gap: 8,
+              activeColor: AppColors.mainColor, // لونك المفضل
+              iconSize: 24,
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+              duration: Duration(milliseconds: 400),
+              tabBackgroundColor: AppColors.mainColor.withOpacity(
+                0.1,
+              ), // خلفية خفيفة عند الاختيار
+              color: const Color.fromARGB(127, 20, 18, 18),
+              tabs: const [
+                GButton(icon: CupertinoIcons.home, text: 'Home'),
+                GButton(icon: CupertinoIcons.cart_fill, text: 'Cart'),
+                GButton(icon: CupertinoIcons.person_fill, text: 'Profile'),
               ],
+              selectedIndex: context.read<HomeCubit>().pageIndex,
+              onTabChange: (index) {
+                context.read<HomeCubit>().changePageIndex(index);
+              },
             ),
           ),
         );

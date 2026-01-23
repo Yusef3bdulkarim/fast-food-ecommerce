@@ -42,22 +42,22 @@ class CartModels extends Equatable {
       'description': description,
       'stars': stars,
       'location': location,
-      'type_id': typeId,
+      'type_id': typeId, // تأكد إن الاسم هنا
     };
   }
 
   CartModels.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-    price = json['price'];
+    name = json['name'] ?? "Unknown";
+    price = json['price'] ?? 0;
     img = json['img'];
-    quantity = json['quantity'];
-    isExcited = json['isExcited'];
+    quantity = json['quantity'] ?? 0;
+    isExcited = json['isExcited'] ?? false;
     time = json['time'];
-    description = json['description'];
-    stars = json['stars'];
-    location = json['location'];
-    typeId = json['type_id'];
+    description = json['description'] ?? "";
+    stars = json['stars'] ?? 0;
+    location = json['location'] ?? "";
+    typeId = json['type_id']; // لازم يطابق الـ toJson
   }
   ProductModel toProductModel() {
     return ProductModel(

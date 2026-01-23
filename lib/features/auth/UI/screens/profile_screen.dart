@@ -1,4 +1,5 @@
 import 'package:ecommerce_app_food/core/routing/routing_helper.dart';
+import 'package:ecommerce_app_food/core/share/box_is_empty.dart';
 import 'package:ecommerce_app_food/core/utils/colors.dart';
 import 'package:ecommerce_app_food/core/utils/costume_text.dart';
 import 'package:ecommerce_app_food/features/CartScreens/logic/cubit/cart_cubit.dart';
@@ -13,7 +14,6 @@ import 'package:gap/gap.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
-
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -22,7 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // اطلب بيانات البروفايل أول ما الصفحة تفتح
     context.read<AuthCubit>().getUserProfile();
   }
 
@@ -78,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
 
-                  ImageProfile(),
+                  const ImageProfile(),
                   SliverToBoxAdapter(
                     child: Column(
                       children: [
@@ -149,11 +148,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(child: Gap(20.h)),
+                  SliverToBoxAdapter(child: Gap(90.h)),
                 ],
               );
             } else {
-              return Center(child: Text("Error loading profile"));
+              return Center(
+                child: GestureDetector(
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    RoutingHelper.loginIn,
+                    (route) => false,
+                  ),
+                  child: BoxIsEmpty(
+                    text: " Go To Sign In Page !",
+                    img: "assets/image/signintocontinue.png",
+                    sizeImage: 290,
+                  ),
+                ),
+              );
             }
           },
         ),

@@ -9,9 +9,7 @@ class ServiceLocator {
   static late SharedPreferences sharedPreferences;
   static late CartRepo cartRepo;
   static late AuthRepo authRepo;
-
   static late ApiServices apiServices;
-
   static late DioClient dioClient;
   static Future<void> init() async {
     dioClient = DioClient(appBaseUrl: ConstantsApp.baseUrl);
